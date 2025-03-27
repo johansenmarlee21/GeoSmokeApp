@@ -3,6 +3,8 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var showModal = false
+    @State private var detent: PresentationDetent = .fraction(0.06)
+    @State private var isExpanded: Bool = false
   
     var body: some View{
         ZStack{
@@ -14,8 +16,14 @@ struct ContentView: View {
             }
         }
         .sheet(isPresented: $showModal){
-            BottomModalView()
-                .presentationDetents([.medium, .fraction(0.15)])
+            BottomModalView(isExpanded: $isExpanded, detent: $detent)
+                .presentationDetents([.fraction(0.06), .medium], selection: $detent).onChange(of: detent){ newDetent in
+                    withAnimation{
+                        isExpanded = newDetent == .medium
+                    }
+                        
+                    
+                }
                 .presentationDragIndicator(.visible)
                 .interactiveDismissDisabled(true)
         }

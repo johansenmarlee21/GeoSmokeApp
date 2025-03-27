@@ -26,9 +26,9 @@ struct TopView: View{
                         
                         VStack {
                             Image(systemName: "slider.horizontal.3")
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .padding(7)
-                                .background(Color.green.opacity(1))
+                                .background(Color.darkGreen)
                                 .clipShape(Circle())
                             
                         }
@@ -40,9 +40,9 @@ struct TopView: View{
                     }){
                         VStack {
                             Image(systemName: "exclamationmark.triangle")
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .padding(7)
-                                .background(Color.green)
+                                .background(Color.darkGreen)
                                 .clipShape(Circle())
                         }
                     }
@@ -52,7 +52,7 @@ struct TopView: View{
                         print("sldhfds")
                     }){
                         Image(systemName: "smoke.fill")
-                            .foregroundColor(.green)
+                            .foregroundColor(.darkGreen)
                     }
                 }
             }.toolbarBackground(.visible, for: .navigationBar)
