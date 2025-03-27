@@ -21,6 +21,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		1963ACDB2D9555830017C599 /* DetailView */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DetailView;
+			sourceTree = "<group>";
+		};
 		CC17B9C72D927C4B0071F21B /* GeoSmoke */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -47,6 +52,7 @@
 			children = (
 				CC17B9C72D927C4B0071F21B /* GeoSmoke */,
 				CC17B9C62D927C4B0071F21B /* Products */,
+				1963ACDB2D9555830017C599 /* DetailView */,
 			);
 			sourceTree = "<group>";
 		};
@@ -74,6 +80,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				1963ACDB2D9555830017C599 /* DetailView */,
 				CC17B9C72D927C4B0071F21B /* GeoSmoke */,
 			);
 			name = GeoSmoke;
