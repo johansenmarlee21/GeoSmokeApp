@@ -6,20 +6,26 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct DetailView: View {
+
+    var area: SmokingArea
+    @Environment(\.modelContext) private var context
+
+    
     var body: some View {
         NavigationStack {
-            HeaderView().padding(.top, -50)
+            HeaderView(area: area).padding(.top, -50)
             ScrollView {
                 VStack (){
-                    LocationInfoView()
-                    CarouselView()
+                    LocationInfoView(name: area.name, location: area.location)
+                    CarouselView(images: area.allPhoto.map { $0.photo })
                     CigaretteTypeView()
-                    FacilitiesView()
+                    FacilitiesView(facilities: area.facilities)
                     PreferenceGaugeView()
                         .padding(.top, 5)
-                    WasteBinDirectionView()
+                    WasteBinDirectionView(photoURL: area.disposalPhotoURL, directions: area.disposalDirection)
                 }
                 .padding(.top, -5)
             }
@@ -32,6 +38,9 @@ struct DetailView: View {
 
 struct HeaderView: View {
     @Environment(\.dismiss) var dismiss
+    var area: SmokingArea
+    @Environment(\.modelContext) private var context
+    
     var body: some View {
         HStack {
             Button(action: {
@@ -53,9 +62,14 @@ struct HeaderView: View {
             Spacer()
 
             Button(action: {
-                // Action for bookmark
+                area.isFavorite.toggle()
+                    do {
+                        try context.save()
+                    } catch {
+                        print("Failed to save: \(error)")
+                    }
             }) {
-                Image(systemName: "bookmark")
+                Image(systemName: area.isFavorite ? "bookmark.fill" : "bookmark")
                     .resizable()
                     .frame(width: 20, height: 28)
                     .foregroundColor(.orange)
@@ -68,13 +82,16 @@ struct HeaderView: View {
 
 // MARK: - Location Info
 struct LocationInfoView: View {
+    var name: String
+    var location: String
+    
     var body: some View {
         HStack {
-            Text("Acasia Park")
+            Text(name)
                 .bold()
                 .font(.title3)
-            BadgeView(text: "GOP 9", color: .green)
-        }.padding(.bottom,-5)
+            BadgeView(text: location, color: .green)
+        }.padding(.bottom, -5)
     }
 }
 
@@ -96,18 +113,19 @@ struct CigaretteTypeView: View {
 
 // MARK: - Facilities Section
 struct FacilitiesView: View {
+    var facilities: [Facility]
+    
     var body: some View {
         SectionView(title: "Facilities") {
             HStack {
-                BadgeView(text: "Chair", color: .green.opacity(0.4))
-                BadgeView(text: "Canopy", color: .green.opacity(0.7))
-                BadgeView(text: "Trash Bin", color: .green.opacity(0.5))
+                ForEach(facilities, id: \.name) { facility in
+                    BadgeView(text: facility.name, color: .green.opacity(0.5))
+                }
             }
             .frame(width: 340, alignment: .leading)
             .background(Color.green.opacity(0.15))
             .cornerRadius(10)
         }
-        
         .padding(5)
     }
 }
@@ -144,33 +162,37 @@ struct PreferenceGaugeView: View {
 
 // MARK: - Waste Bin Direction
 struct WasteBinDirectionView: View {
+    var photoURL: String
+    var directions: String
+
     var body: some View {
-        VStack(){
-            Text ("Waste Bin")
+        VStack {
+            Text("Waste Bin")
                 .font(.body)
                 .bold()
                 .padding(.top, 10)
                 .frame(width: 340, alignment: .leading)
-            HStack() {
-                Image("Butet")
-                    .resizable()
-                    .frame(width: 140, height: 140)
-                    .cornerRadius(10)
-                    .padding(10)
-                
+                .foregroundStyle(Color.black)
+            HStack {
+                AsyncImage(url: URL(string: photoURL)) { image in
+                    image.resizable()
+                } placeholder: {
+                    ProgressView()
+                }
+                .frame(width: 140, height: 140)
+                .cornerRadius(10)
+                .padding(10)
+
                 VStack(alignment: .leading) {
                     Text("Directions")
                         .font(.callout)
                         .bold()
                         .padding(.vertical, 10)
-                    Text("- Find a nearby oak tree")
-                        .font(.caption2)
-                    Text("- Look under the oak tree")
+                    Text(directions)
                         .font(.caption2)
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                
             }
             .frame(width: 356, height: 159)
             .background(Color.green.opacity(0.15))
@@ -179,7 +201,6 @@ struct WasteBinDirectionView: View {
         .padding(10)
     }
 }
-
 
 // MARK: - Reusable Components
 
@@ -246,28 +267,51 @@ struct PreferenceIconView: View {
     }
 }
 
-struct CarouselView:View {
-    
-    let images = ["Butet", "Kentang", "Sky"]
+struct CarouselView: View {
+    let images: [String]
     
     var body: some View {
-            TabView {
-                ForEach(images, id: \.self) { image in
-                    Image(image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 300, height: 200)
-                        .clipped()
-                        .cornerRadius(10)
-                        .padding()
+        TabView {
+            ForEach(images, id: \.self) { image in
+                AsyncImage(url: URL(string: image)) { image in
+                    image.resizable()
+                } placeholder: {
+                    ProgressView()
                 }
+                .scaledToFill()
+                .frame(width: 300, height: 200)
+                .clipped()
+                .cornerRadius(10)
+                .padding()
             }
-            .tabViewStyle(PageTabViewStyle())
-            .frame(height: 220)
         }
+        .tabViewStyle(PageTabViewStyle())
+        .frame(height: 220)
+    }
 }
 
-#Preview {
-    DetailView()
-}
 
+
+//#Preview {
+//    DetailView(area: SmokingArea(
+//        name: "The Shady",
+//        location: "GOP 1",
+//        latitude: -6.3009886,
+//        longitude: 106.6510372,
+//        photoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
+//        disposalPhotoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
+//        disposalDirection: "disitu",
+//        facilities: [
+//            Facility(name: "Chair"),
+//            Facility(name: "Waste Bin"),
+//            Facility(name: "Roof")
+//        ],
+//        isFavorite: false,
+//        allPhoto: [
+//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
+//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
+//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
+//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png")
+//        ]
+//    ))
+//}
