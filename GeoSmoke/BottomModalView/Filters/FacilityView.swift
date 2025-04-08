@@ -28,6 +28,7 @@ struct FacilityView: View{
                     FacilityViewItem(area: area, onSelect: onSelect)
                 }
             }
+            .padding(.horizontal, 12)
         }
     }
 }
