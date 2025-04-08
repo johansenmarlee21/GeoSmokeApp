@@ -2,7 +2,8 @@ import SwiftUI
 
 struct SplashScreenView: View {
     @State private var showGreenLogo = false
-
+    @StateObject private var locationManager = LocationManager.shared
+    
     var body: some View {
         VStack(alignment: .center) {
             ZStack {
@@ -22,15 +23,17 @@ struct SplashScreenView: View {
             }
             .animation(.easeInOut(duration: 0.6), value: showGreenLogo)
             .padding(.bottom, 0)
-
+            
             Text("GeoSmoke")
                 .font(.system(size: 40))
                 .fontWeight(.bold)
-                .foregroundColor(Color.splashGreen)
+                .foregroundColor(Color.black)
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                 showGreenLogo = true
+                locationManager.requestPermission()
+                locationManager.printAuthorizationStatus()
             }
         }
     }

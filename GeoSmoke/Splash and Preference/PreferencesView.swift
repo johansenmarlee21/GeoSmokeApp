@@ -7,6 +7,7 @@ struct PreferencesView: View {
     @Binding var selectedFacilities: Set<String>
     @Binding var selectedTypes: Set<String>
     
+    
     var onSave: () -> Void
     
     var body: some View {
@@ -14,7 +15,6 @@ struct PreferencesView: View {
             Text("Preferences")
                 .font(.title2)
                 .bold()
-                .padding(.top)
             
             
             VStack(alignment: .leading) {
@@ -72,17 +72,18 @@ struct PreferencesView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color.darkGreen)
-                    .foregroundColor(.white)
+                    .foregroundColor(Color.white)
                     .cornerRadius(12)
             }
             .padding(.top)
             
         }
         .padding()
-        .background(.ultraThinMaterial)
+        .background(Color.white).opacity(1)
         .cornerRadius(24)
         .padding()
-        .shadow(radius: 10)
+        .shadow(radius: 20)
+        .padding(.bottom, 30)
     }
     
     func binding(for item: String, in set: Binding<Set<String>>) -> Binding<Bool> {
@@ -92,7 +93,7 @@ struct PreferencesView: View {
                 if isSelected {
                     set.wrappedValue.insert(item)
                 } else {
-                    set.wrappedValue.remove(item)   
+                    set.wrappedValue.remove(item)
                 }
             }
         )
