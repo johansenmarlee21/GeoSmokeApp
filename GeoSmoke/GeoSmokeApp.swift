@@ -7,12 +7,14 @@ struct GeoSmokeApp: App {
     var sharedModelContainer: ModelContainer = {
         do {
             let schema = Schema([SmokingArea.self, Facility.self, UserModel.self])
+
             let config = ModelConfiguration()
             return try ModelContainer(for: schema, configurations: [config])
         } catch {
             fatalError("❌ Failed to load model container: \(error)")
         }
     }()
+
     
     
     var body: some Scene {
