@@ -96,7 +96,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         if annotationView == nil {
             annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             annotationView?.canShowCallout = true
-            
+
             annotationView?.glyphImage = UIImage(systemName: "mappin.circle.fill")
             
             let detailButton = UIButton(type: .detailDisclosure)
@@ -161,4 +161,5 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 
 class SmokingAreaAnnotation: MKPointAnnotation {
     var area: SmokingArea?
+
 }
