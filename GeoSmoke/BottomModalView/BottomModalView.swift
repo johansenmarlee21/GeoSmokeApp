@@ -106,6 +106,7 @@ struct FilterButton:View {
 //                    .foregroundColor(.black.opacity(0.9))
                     .background(selectedFilter == type ? Color.green300 : Color.white)
                     .clipShape(.circle)
+                    
                 
             }
             Text(title)

@@ -1,3 +1,4 @@
+
 //
 //  SmokingAreaModel.swift
 //  GeoSmoke

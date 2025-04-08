@@ -2,12 +2,14 @@ import SwiftUI
 import SwiftData
 import CoreLocation
 
+
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     
     @State private var showModal = false
     @State private var detent: PresentationDetent = .fraction(0.06)
     @State private var isExpanded: Bool = false
+
     @State private var showSmokingAlert = false
 
     @State private var smokingAreas: [SmokingArea] = []
@@ -81,6 +83,7 @@ struct ContentView: View {
                     .transition(.opacity)
                     .zIndex(3)
                 }
+
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -210,6 +213,7 @@ struct ContentView: View {
                 BottomModalView(isExpanded: $isExpanded, detent: $detent)
                     .presentationDetents([.fraction(0.06), .fraction(0.65)], selection: $detent)
                     .onChange(of: detent) { oldDetent, newDetent in
+
                         withAnimation {
                             isExpanded = newDetent == .fraction(0.65)
                         }

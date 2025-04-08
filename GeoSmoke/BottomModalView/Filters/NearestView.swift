@@ -61,6 +61,7 @@ struct NearestView: View{
 struct NearestCardView: View{
     var area: SmokingArea
     @State private var showDetail = false
+
     
     var body: some View{
         VStack(alignment: .center, spacing: 0){
@@ -89,6 +90,7 @@ struct NearestCardView: View{
                 Text(area.location)
                     .font(.subheadline)
                     .padding(.trailing, 3)
+
                     .padding(.horizontal, 8)
                     .background(Color.green300)
                     .cornerRadius(8)
@@ -100,6 +102,7 @@ struct NearestCardView: View{
                 
                 Button(action: {
                     showDetail = true
+
                 }){
                     HStack{
                         Text("Detail")
@@ -115,11 +118,13 @@ struct NearestCardView: View{
                     .fullScreenCover(isPresented: $showDetail) {
                         DetailView(area: area)
                     }
+
                 }
                     
             }
             .padding(.vertical, 5)
             .padding(.horizontal, 18)
+
             .background(Color.green100)
             .cornerRadius(20)
             
@@ -143,8 +148,10 @@ struct NearestCardView: View{
 
 
 struct SmokingAreaListItem: View {
+
    var area: SmokingArea
     @State private var showDetail = false
+
     
     var body: some View {
         HStack(alignment: .center){
@@ -159,10 +166,12 @@ struct SmokingAreaListItem: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(area.name)
+
                     .font(.system(size:15))
                     .fontWeight(.semibold)
                 Text(area.location)
                     .font(.system(size: 12))
+
                     .padding(.vertical, 1)
                     .padding(.horizontal, 8)
                     .background(Color.green300)
@@ -177,6 +186,7 @@ struct SmokingAreaListItem: View {
             
             Button(action: {
                 showDetail = true
+
             }){
                 VStack(alignment: .center){
                     Image(systemName: "location.fill")
@@ -196,6 +206,7 @@ struct SmokingAreaListItem: View {
                 .fullScreenCover(isPresented: $showDetail) {
                     DetailView(area: area)
                 }
+
             }
             
         }
@@ -206,6 +217,7 @@ struct SmokingAreaListItem: View {
         .cornerRadius(10)
     }
 }
+
 
 
 #Preview {

@@ -6,6 +6,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var mapView: MKMapView!
     var smokingAreas: [SmokingArea] = []
     var context: ModelContext
+
     
     init(context: ModelContext) {
         self.context = context

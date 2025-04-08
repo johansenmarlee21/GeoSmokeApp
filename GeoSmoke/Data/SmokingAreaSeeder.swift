@@ -17,6 +17,7 @@ struct SmokingAreaSeeder {
                     longitude: 106.6510372,
                     photoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
                     disposalPhotoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
+
                     disposalDirection: "disitu",
                     facilities: [
                         Facility(name: "Chair"),
@@ -72,3 +73,5 @@ struct SmokingAreaSeeder {
         }
     }
 }
+
+

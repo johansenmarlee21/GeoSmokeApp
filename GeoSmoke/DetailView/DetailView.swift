@@ -73,6 +73,7 @@ struct HeaderView: View {
     var area: SmokingArea
     @Environment(\.modelContext) private var context
     
+
     var body: some View {
         HStack {
             Button(action: {
@@ -102,6 +103,7 @@ struct HeaderView: View {
                     }
             }) {
                 Image(systemName: area.isFavorite ? "bookmark.fill" : "bookmark")
+
                     .resizable()
                     .frame(width: 20, height: 28)
                     .foregroundColor(.orange)
@@ -338,6 +340,7 @@ struct WasteBinDirectionView: View {
                         .bold()
                         .padding(.vertical, 10)
                     Text(directions)
+
                         .font(.caption2)
                     Spacer()
                 }
@@ -350,6 +353,7 @@ struct WasteBinDirectionView: View {
         .padding(10)
     }
 }
+
 
 
 
@@ -464,3 +468,4 @@ struct CarouselView: View {
 //        ]
 //    ))
 //}
+
