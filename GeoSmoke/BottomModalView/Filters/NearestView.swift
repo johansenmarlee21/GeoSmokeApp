@@ -90,13 +90,14 @@ struct NearestCardView: View{
             HStack(alignment: .center){
                 Text(area.location)
                     .font(.subheadline)
-                    .padding(.vertical, 3)
+                    .padding(.trailing, 3)
                     .padding(.horizontal, 8)
                     .background(Color.green300)
                     .cornerRadius(8)
                 
                 Text(area.name)
-                    .font(.headline)
+                    .font(.system(size:15))
+                    .fontWeight(.semibold)
                     .padding(.horizontal, 20)
                 
                 Button(action: {
@@ -120,7 +121,7 @@ struct NearestCardView: View{
                 
             }
             .padding(.vertical, 5)
-            .padding(.horizontal, 30)
+            .padding(.horizontal, 18)
             .background(Color.green100)
             .cornerRadius(20)
             
@@ -148,6 +149,7 @@ struct NearestCardView: View{
 struct SmokingAreaListItem: View {
     var area: SmokingArea
     var onSelect: ((SmokingArea) -> Void)? = nil
+
     @State private var showDetail = false
     
     var body: some View {
@@ -163,9 +165,10 @@ struct SmokingAreaListItem: View {
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(area.name)
-                    .font(.headline)
+                    .font(.system(size:15))
+                    .fontWeight(.semibold)
                 Text(area.location)
-                    .font(.system(size: 13))
+                    .font(.system(size: 12))
                     .padding(.vertical, 1)
                     .padding(.horizontal, 8)
                     .background(Color.green300)
@@ -196,6 +199,9 @@ struct SmokingAreaListItem: View {
                 .background(Color.orangetheme)
                 .cornerRadius(10)
                 .padding(.trailing, 5)
+                .fullScreenCover(isPresented: $showDetail) {
+                    DetailView(area: area)
+                }
             }
             
         }
@@ -210,21 +216,25 @@ struct SmokingAreaListItem: View {
         .onTapGesture {
             onSelect?(area)
         }
+
     }
 }
 
-
-#Preview{
-    SmokingAreaListItem(area: SmokingArea(
-        name: "The Shady",
+#Preview {
+    NearestCardView(area: SmokingArea(
+        name: "Garden Seating",
         location: "GOP 1",
-        latitude: 106.6510372,
-        longitude: -6.3009886,
+        latitude: -6.3009886,
+        longitude: 106.6510372,
         photoURL: "https://picsum.photos/200/300",
         disposalPhotoURL: "https://picsum.photos/200/300",
         disposalDirection: "Near the entrance",
-        facilityGrade: "Moderate"
+        facilities: [],
+        isFavorite: false,
+        allPhoto: [],
+        facilityGrade: "Moderate",
+        ambience: "Quiet",
+        crowdLevel: "Low",
+        smokingTypes: ["Open Area"]
     ))
-    
-    //    NearestView()
 }

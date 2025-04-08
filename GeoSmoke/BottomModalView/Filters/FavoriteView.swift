@@ -55,6 +55,7 @@ struct EmptyFavoriteView: View {
 struct FavoriteListItem: View {
     var area: SmokingArea
     var onSelect: ((SmokingArea) -> Void)? = nil
+
     @State private var showDetail = false
     
     var body: some View {
@@ -106,6 +107,7 @@ struct FavoriteListItem: View {
                 .fullScreenCover(isPresented: $showDetail) {
                     DetailView(area: area)
                 }
+
             }
             .padding(.trailing, 10)
             
@@ -121,26 +123,27 @@ struct FavoriteListItem: View {
     }
 }
 
-#Preview {    
-    FavoriteListItem(area: SmokingArea(
-        name: "Garden Seating",
-        location: "Garden",
-        latitude: -6.3013122,
-        longitude: 106.6522975,
-        photoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-        disposalPhotoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-        disposalDirection: "disitu",
-        facilities: [
-            Facility(name: "Chair"),
-            Facility(name: "Waste Bin"),
-        ],
-        isFavorite: false,
-        allPhoto: [
-            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png")
-        ],
-        facilityGrade: "High"
-    ))
-}
+//#Preview {    
+//    FavoriteListItem(area: SmokingArea(
+//        name: "Garden Seating",
+//        location: "Garden",
+//        latitude: -6.3013122,
+//        longitude: 106.6522975,
+//        photoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
+//        disposalPhotoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
+//        disposalDirection: "disitu",
+//        facilities: [
+//            Facility(name: "Chair"),
+//            Facility(name: "Waste Bin"),
+//        ],
+//        isFavorite: false,
+//        allPhoto: [
+//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
+//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
+//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
+//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png")
+//        ],
+//        facilityGrade: "High"
+//    ))
+//
+//}
