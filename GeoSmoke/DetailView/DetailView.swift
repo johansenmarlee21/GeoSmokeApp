@@ -8,8 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct DetailView: View {
-    
+struct DetailView: View {    
     var area: SmokingArea
     @Environment(\.modelContext) private var context
     @Query private var users: [UserModel]
@@ -31,7 +30,6 @@ struct DetailView: View {
                     if let currentUser {
                         PreferenceGaugeView(area: area, userModel: currentUser)
                     }
-
 
                     WasteBinDirectionView(photoURL: area.disposalPhotoURL, directions: area.disposalDirection)
                 }
@@ -352,6 +350,7 @@ struct WasteBinDirectionView: View {
         .padding(10)
     }
 }
+
 
 
 struct BadgeView: View {

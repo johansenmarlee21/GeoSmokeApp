@@ -100,6 +100,7 @@ struct FacilityViewItem: View {
     }
 }
 
+
 //#Preview {
 //    FacilityViewItem(area: SmokingArea(
 //        name: "Garden Seating",
@@ -126,4 +127,5 @@ struct FacilityViewItem: View {
 //        smokingType: "Vape Friendly" // <-- And this
 //    ))
 //}
+
 

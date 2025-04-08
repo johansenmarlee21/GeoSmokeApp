@@ -9,6 +9,7 @@ struct ContentView: View {
     @State private var detent: PresentationDetent = .fraction(0.06)
     @State private var isExpanded: Bool = false
     @State private var showSmokingAlert = false
+
     @State private var smokingAreas: [SmokingArea] = []
     @State private var userLocation: CLLocation?
     @State private var isInSmokingArea: Bool = false
@@ -88,6 +89,22 @@ struct ContentView: View {
                         .scaledToFit()
                         .frame(width: 120)
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                                    Button(action: {
+                                        withAnimation(.spring(response: 0.2, dampingFraction: 0.8)){
+                                            showSmokingAlert = true
+                                        }
+                                    }) {
+                                        if !showSmokingAlert {
+                                            Image(systemName: "exclamationmark.triangle")
+                                                .matchedGeometryEffect(id: "smokingPopup", in: popUpNameSpace)
+                                                .foregroundColor(.white)
+                                                .padding(7)
+                                                .background(Color.darkGreen)
+                                                .clipShape(Circle())
+                                        }
+                                    }
+                                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         withAnimation(.spring(response: 0.2, dampingFraction: 0.8)){

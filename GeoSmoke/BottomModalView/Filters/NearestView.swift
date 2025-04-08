@@ -228,4 +228,3 @@ struct SmokingAreaListItem: View {
 }
 
 
-
