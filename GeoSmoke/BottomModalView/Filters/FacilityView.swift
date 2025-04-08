@@ -23,11 +23,13 @@ struct FacilityView: View{
     
     var body: some View{
         ScrollView {
-            LazyVStack(spacing: 10) {
+            LazyVStack() {
                 ForEach(sortedSmokingAreas, id: \.self) { area in
                     FacilityViewItem(area: area, onSelect: onSelect)
+                        .padding(.bottom, 3)
                 }
             }
+            .padding(.top, 10)
         }
     }
 }
@@ -41,36 +43,52 @@ struct FacilityViewItem: View {
     
     var body: some View {
         HStack(alignment: .center){
-            AsyncImage(url: URL(string: area.photoURL)) { image in
-                image.resizable().scaledToFill()
-            } placeholder: {
-                ProgressView()
+            if UIImage(named: area.photoURL) != nil {
+                Image(area.photoURL)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 115, height: 70)
+                    .cornerRadius(5)
+                    .padding(.leading, 5)
+            } else {
+                Text("Image not found: \(area.photoURL)")
+                    .foregroundColor(.red)
             }
-            .frame(width: 115, height: 70)
-            .cornerRadius(5)
-            .padding(.leading, 5)
+            
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(area.name)
                     .font(.headline)
-                Text(area.location)
-                    .font(.system(size: 13))
-                    .padding(.vertical, 1)
-                    .padding(.horizontal, 8)
-                    .background(Color.green300)
-                    .cornerRadius(8)
-                    .padding(.top, 2)
+                HStack{
+                    Text(area.location)
+                        .font(.system(size: 13))
+                        .padding(.vertical, 1)
+                        .padding(.horizontal, 8)
+                        .background(Color.green300)
+                        .cornerRadius(8)
+                        .padding(.top, 2)
+                    
+                    Text(area.facilityGrade)
+                        .font(.system(size: 13))
+                        .padding(.vertical, 1)
+                        .padding(.horizontal, 8)
+                        .background(colorForFacilityGrade(area.facilityGrade))
+                        .cornerRadius(4)
+                        .padding(.top, 2)
+                    
+                }
+                
                 Spacer()
                 ScrollView(.horizontal, showsIndicators: false){
                     HStack{
                         ForEach(area.facilities, id: \.name) { facility in
-                            Text("\(facility.name)")
-                                .font(.system(size: 13))
-                                .padding(.vertical, 1)
-                                .padding(.horizontal, 8)
-                                .background(Color.green.opacity(0.3))
-                                .cornerRadius(8)
-                                .padding(.top, 2)
+                            Image(systemName: iconName(for: facility.name))
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(width: 15, height: 15)
+                                                .padding(5)
+                                                .background(Color.green.opacity(0.3))
+                                                .clipShape(Circle())
                         }
                     }
                 }
@@ -114,6 +132,33 @@ struct FacilityViewItem: View {
             onSelect?(area)
         }
     }
+    
+    func colorForFacilityGrade(_ grade: String) -> Color {
+        switch grade {
+        case "High":
+            return .green
+        case "Moderate":
+            return .yellow
+        case "Low":
+            return .red
+        default:
+            return .gray
+        }
+    }
+    
+    func iconName(for facility: String) -> String {
+        switch facility {
+        case "Chair":
+            return "chair.lounge"
+        case "Waste Bin":
+            return "trash"
+        case "Roof":
+            return "house"
+        default:
+            return "questionmark.circle" // fallback icon
+        }
+    }
+
 }
 
 //#Preview {

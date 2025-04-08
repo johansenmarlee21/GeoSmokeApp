@@ -25,6 +25,9 @@ struct ContentView: View {
     @Namespace private var popUpNameSpace
     @Namespace private var popUpPreferences
     
+    @AppStorage("hasLaunchedBefore") private var hasLaunchedBefore: Bool = false
+
+    
     // MARK: - Selection & Location
     @State private var selectedArea: SmokingArea?
     
@@ -99,7 +102,7 @@ struct ContentView: View {
                     )
                     .transition(.scale.combined(with: .opacity))
                     .matchedGeometryEffect(id: "PreferencesPopUp", in: popUpPreferences)
-                    .zIndex(1)
+                    .zIndex(4)
                 }
                 if showSmokingAlert{
 //                    alertOverlay
@@ -241,7 +244,14 @@ struct ContentView: View {
                         print("❌ Error checking user model: \(error)")
                     }
                 }
-                //----
+                
+                if !hasLaunchedBefore {
+                    withAnimation {
+                        isPresented = true 
+                    }
+                    hasLaunchedBefore = true
+                }
+
                 
                 }
             .sheet(isPresented: $showModal) {

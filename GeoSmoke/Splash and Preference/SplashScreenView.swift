@@ -26,7 +26,7 @@ struct SplashScreenView: View {
             Text("GeoSmoke")
                 .font(.system(size: 40))
                 .fontWeight(.bold)
-                .foregroundColor(Color.splashGreen)
+                .foregroundColor(Color.black)
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {

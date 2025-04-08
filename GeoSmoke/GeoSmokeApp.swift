@@ -48,10 +48,10 @@ struct GeoSmokeApp: App {
         
         SmokingAreaSeeder.seedDataIfNeeded(context: context)
         let testUser = UserModel(
-            ambiencePreference: "Bright",
+            ambiencePreference: "Dark",
             crowdLevelPreference: "Low",
-            facilityPreference: ["Chair", "Waste Bin"],
-            type: ["Cigarette"]
+            facilityPreference: ["Chair", "Waste Bin", "Roof"],
+            type: ["Cigarette", "E-cigarette"]
         )
         context.insert(testUser)
         UserDefaults.standard.set(true, forKey: "hasPreloadedSmokingArea")

@@ -66,26 +66,35 @@ struct NearestCardView: View{
     
     var body: some View{
         VStack(alignment: .center, spacing: 0){
-            AsyncImage(url: URL(string: area.photoURL)) { phase in
-                switch phase {
-                case .empty:
-                    ProgressView()
-                case .success(let image):
-                    image.resizable().scaledToFill()
-                case .failure:
-                    Image(systemName: "xmark.circle")
-                @unknown default:
-                    EmptyView()
-                }
+            if UIImage(named: area.photoURL) != nil {
+                Image(area.photoURL)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 200, height: 120)
+                    .clipped()
+                    .cornerRadius(5)
+                    .clipped()
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 8)
+                    .background(Color.green100)
+                    .cornerRadius(10)
+                    .padding(.bottom, 5)
+            } else {
+                Text("Image not found: \(area.photoURL)")
+                    .foregroundColor(.red)
             }
-            .frame(width: 200, height: 120)
-            .cornerRadius(5)
-            .clipped()
-            .padding(.horizontal, 8)
-            .padding(.vertical, 8)
-            .background(Color.green100)
-            .cornerRadius(10)
-            .padding(.bottom, 5)
+
+//            Image("TheJog1")
+//                .resizable()
+//                .scaledToFill()
+//                .frame(width: 200, height: 120)
+//                .cornerRadius(5)
+//                .clipped()
+//                .padding(.horizontal, 8)
+//                .padding(.vertical, 8)
+//                .background(Color.green100)
+//                .cornerRadius(10)
+//                .padding(.bottom, 5)
             
             HStack(alignment: .center){
                 Text(area.location)
@@ -140,6 +149,9 @@ struct NearestCardView: View{
         }
         .onAppear {
             onSelect?(area)
+            print("area.name: \(area.name)")
+                print("area.photoURL: \(area.photoURL)")
+
         }
     }
 }
@@ -154,14 +166,18 @@ struct SmokingAreaListItem: View {
     
     var body: some View {
         HStack(alignment: .center){
-            AsyncImage(url: URL(string: area.photoURL)) { image in
-                image.resizable().scaledToFill()
-            } placeholder: {
-                ProgressView()
+            if UIImage(named: area.photoURL) != nil {
+                Image(area.photoURL)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 115, height: 70)
+                    .cornerRadius(5)
+                    .padding(.leading, 5)
+            } else {
+                Text("Image not found: \(area.photoURL)")
+                    .foregroundColor(.red)
             }
-            .frame(width: 115, height: 70)
-            .cornerRadius(5)
-            .padding(.leading, 5)
+            
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(area.name)

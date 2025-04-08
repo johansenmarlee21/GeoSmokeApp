@@ -60,14 +60,17 @@ struct FavoriteListItem: View {
     
     var body: some View {
         HStack(alignment: .center){
-            AsyncImage(url: URL(string: area.photoURL)) { image in
-                image.resizable().scaledToFill()
-            } placeholder: {
-                ProgressView()
+            if UIImage(named: area.photoURL) != nil {
+                Image(area.photoURL)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 115, height: 70)
+                    .cornerRadius(5)
+                    .padding(.leading, 5)
+            } else {
+                Text("Image not found: \(area.photoURL)")
+                    .foregroundColor(.red)
             }
-            .frame(width: 115, height: 70)
-            .cornerRadius(5)
-            .padding(.leading, 5)
             
             VStack(alignment: .leading, spacing: 0) {
                 Text(area.name)
@@ -80,8 +83,19 @@ struct FavoriteListItem: View {
                     .cornerRadius(8)
                     .padding(.top, 2)
                 Spacer()
-                Text("90% Match Your Preference")
-                    .font(.caption2)
+                ScrollView(.horizontal, showsIndicators: false){
+                    HStack{
+                        ForEach(area.facilities, id: \.name) { facility in
+                            Text("\(facility.name)")
+                                .font(.system(size: 13))
+                                .padding(.vertical, 1)
+                                .padding(.horizontal, 8)
+                                .background(Color.green.opacity(0.3))
+                                .cornerRadius(8)
+                                .padding(.top, 2)
+                        }
+                    }
+                }
             }
             
             Spacer()

@@ -15,8 +15,30 @@ struct SmokingAreaSeeder {
                     location: "GOP 1",
                     latitude: -6.3009886,
                     longitude: 106.6510372,
-                    photoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-                    disposalPhotoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
+                    photoURL: "TheShady1",
+                    disposalPhotoURL: "TheShadyWaste",
+                    disposalDirection: "disitu",
+                    facilities: [
+                        Facility(name: "Waste Bin"),
+                        Facility(name: "Roof")
+                    ],
+                    isFavorite: false,
+                    allPhoto: [
+                        LocationAllPhoto(photo: "TheShady1"),
+                        LocationAllPhoto(photo: "TheShady2"),
+                    ],
+                    facilityGrade: "Moderate",
+                    ambience: "Dark",
+                    crowdLevel: "Low",
+                    smokingTypes: ["Cigarette", "E-cigarette"]
+                ),
+                SmokingArea(
+                    name: "Garden Seating",
+                    location: "Garden",
+                    latitude: -6.3013122,
+                    longitude: 106.6522975,
+                    photoURL: "GardenSeating1",
+                    disposalPhotoURL: "GardenSeating2",
                     disposalDirection: "disitu",
                     facilities: [
                         Facility(name: "Chair"),
@@ -25,40 +47,144 @@ struct SmokingAreaSeeder {
                     ],
                     isFavorite: false,
                     allPhoto: [
-                        LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-                        LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-                        LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-                        LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png")
+                        LocationAllPhoto(photo: "GardenSeating1"),
+                        LocationAllPhoto(photo: "GardenSeating2"),
                     ],
-                    facilityGrade: "Moderate",
+                    facilityGrade: "High",
                     ambience: "Dark",
-                    crowdLevel: "Low",
-                    smokingTypes: ["Cigarette"]
+                    crowdLevel: "High",
+                    smokingTypes: ["Cigarette", "E-cigarette"]
                 ),
                 SmokingArea(
-                    name: "Garden Seating",
-                    location: "Garden",
-                    latitude: -6.3013122,
-                    longitude: 106.6522975,
-                    photoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-                    disposalPhotoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
+                    name: "Ecopuff Corner",
+                    location: "GOP 6",
+                    latitude: -6.303563,
+                    longitude: 106.654619,
+                    photoURL: "EcopuffCorner1",
+                    disposalPhotoURL: "EcopuffCorner2",
                     disposalDirection: "disitu",
                     facilities: [
-                        Facility(name: "Chair"),
+                        Facility(name: "Waste Bin"),
+                        Facility(name: "Roof")
+                    ],
+                    isFavorite: false,
+                    allPhoto: [
+                        LocationAllPhoto(photo: "EcopuffCorner1"),
+                        LocationAllPhoto(photo: "EcopuffCorner2"),
+                    ],
+                    facilityGrade: "Moderate",
+                    ambience: "Bright",
+                    crowdLevel: "High",
+                    smokingTypes: ["E-cigarette"]
+                ),
+                SmokingArea(
+                    name: "The Jog",
+                    location: "GOP 1",
+                    latitude: -6.30362,
+                    longitude: 106.654589,
+                    photoURL: "TheJog1",
+                    disposalPhotoURL: "TheJog2",
+                    disposalDirection: "disitu",
+                    facilities: [
                         Facility(name: "Waste Bin"),
                     ],
                     isFavorite: false,
                     allPhoto: [
-                        LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-                        LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-                        LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-                        LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png")
+                        LocationAllPhoto(photo: "TheJog1"),
+                        LocationAllPhoto(photo: "TheJog2"),
                     ],
-                    facilityGrade: "High",
-                    ambience: "Dark",
+                    facilityGrade: "Low",
+                    ambience: "Bright",
                     crowdLevel: "Low",
-                    smokingTypes: ["Cigarette"]
-                )
+                    smokingTypes: ["E-cigarette", "Cigarette"]
+                ),
+                SmokingArea(
+                    name: "The Smokescape",
+                    location: "Garden",
+                    latitude: -6.302086,
+                    longitude: 106.650891,
+                    photoURL: "SmokeScape1",
+                    disposalPhotoURL: "SmokeScape2",
+                    disposalDirection: "disitu",
+                    facilities: [
+                        Facility(name: "Roof")
+                    ],
+                    isFavorite: false,
+                    allPhoto: [
+                        LocationAllPhoto(photo: "SmokeScape1"),
+                        LocationAllPhoto(photo: "SmokeScape2"),
+                    ],
+                    facilityGrade: "Low",
+                    ambience: "Bright",
+                    crowdLevel: "Low",
+                    smokingTypes: ["E-cigarette"]
+                ),
+                SmokingArea(
+                    name: "NineLoner",
+                    location: "GOP 9",
+                    latitude: -6.3023203,
+                    longitude: 106.6527786,
+                    photoURL: "NineLoner1",
+                    disposalPhotoURL: "NineLoner2",
+                    disposalDirection: "disitu",
+                    facilities: [
+                        Facility(name: "Waste Bin"),
+                        Facility(name: "Chair"),
+                    ],
+                    isFavorite: false,
+                    allPhoto: [
+                        LocationAllPhoto(photo: "NineLoner1"),
+                        LocationAllPhoto(photo: "NineLoner2"),
+                    ],
+                    facilityGrade: "Moderate",
+                    ambience: "Bright",
+                    crowdLevel: "Low",
+                    smokingTypes: ["E-cigarette", "Cigarette"]
+                ),
+                SmokingArea(
+                    name: "The SmokeStage",
+                    location: "Garden",
+                    latitude: -6.3011829,
+                    longitude: 106.6529061,
+                    photoURL: "SmokeStage1",
+                    disposalPhotoURL: "SmokeStage2",
+                    disposalDirection: "disitu",
+                    facilities: [
+                        Facility(name: "Waste Bin"),
+                    ],
+                    isFavorite: false,
+                    allPhoto: [
+                        LocationAllPhoto(photo: "SmokeStage1"),
+                        LocationAllPhoto(photo: "SmokeStage2"),
+                    ],
+                    facilityGrade: "Low",
+                    ambience: "Bright",
+                    crowdLevel: "Low",
+                    smokingTypes: ["E-cigarette", "Cigarette"]
+                ),
+                SmokingArea(
+                    name: "SixJog",
+                    location: "GOP 6",
+                    latitude: -6.3028502,
+                    longitude: 106.6525899,
+                    photoURL: "SixJog1",
+                    disposalPhotoURL: "SixJogWaste",
+                    disposalDirection: "disitu",
+                    facilities: [
+                        Facility(name: "Waste Bin"),
+                        Facility(name: "Chair")
+                    ],
+                    isFavorite: false,
+                    allPhoto: [
+                        LocationAllPhoto(photo: "SixJog1"),
+                        LocationAllPhoto(photo: "SixJog2"),
+                    ],
+                    facilityGrade: "Moderate",
+                    ambience: "Bright",
+                    crowdLevel: "Low",
+                    smokingTypes: ["E-cigarette", "Cigarette"]
+                ),
+                
             ]
 
             for area in sampleAreas {
