@@ -8,28 +8,59 @@
 import SwiftUI
 import SwiftData
 
-struct DetailView: View {
-
+struct DetailView: View {    
     var area: SmokingArea
     @Environment(\.modelContext) private var context
+    @Query private var users: [UserModel]
+    @State private var currentUser: UserModel?
 
-    
+
+
     var body: some View {
         NavigationStack {
+            
             HeaderView(area: area).padding(.top, -50)
             ScrollView {
-                VStack (){
+                VStack {
                     LocationInfoView(name: area.name, location: area.location)
                     CarouselView(images: area.allPhoto.map { $0.photo })
-                    CigaretteTypeView()
+                    CigaretteTypeView(types: area.smokingTypes)
                     FacilitiesView(facilities: area.facilities)
-                    PreferenceGaugeView()
-                        .padding(.top, 5)
+
+                    if let currentUser {
+                        PreferenceGaugeView(area: area, userModel: currentUser)
+                    }
                     WasteBinDirectionView(photoURL: area.disposalPhotoURL, directions: area.disposalDirection)
                 }
                 .padding(.top, -5)
             }
             .navigationBarBackButtonHidden(true)
+            .onAppear {
+                Task {
+                    do {
+                        let descriptor = FetchDescriptor<UserModel>()
+                        let users = try context.fetch(descriptor)
+
+                        if let user = users.first {
+                            currentUser = user
+                        } else {
+                            let testUser = UserModel(
+                                ambiencePreference: "Bright",
+                                crowdLevelPreference: "Quiet",
+                                facilityPreference: ["Chair", "Waste Bin"],
+                                type: ["Cigarette", "E-cigarette"]
+                            )
+                            context.insert(testUser)
+                            try context.save()
+                            currentUser = testUser
+                            print("✅ Inserted test user")
+                        }
+                    } catch {
+                        print("❌ Error fetching/inserting user: \(error)")
+                    }
+                }
+            }
+
         }
     }
 }
@@ -80,7 +111,6 @@ struct HeaderView: View {
     }
 }
 
-// MARK: - Location Info
 struct LocationInfoView: View {
     var name: String
     var location: String
@@ -95,13 +125,15 @@ struct LocationInfoView: View {
     }
 }
 
-// MARK: - Cigarette Type Section
+
 struct CigaretteTypeView: View {
+    var types: [String]
     var body: some View {
         SectionView(title: "Cigarette Type") {
             HStack {
-                BadgeView(text: "Cigarette", color: .orange.opacity(0.9))
-                BadgeView(text: "E-Cigarette", color: .orange.opacity(0.7))
+                ForEach(types, id: \.self) { type in
+                                    BadgeView(text: type, color: .orange.opacity(0.7))
+                                }
             }
             .frame(width: 340, alignment: .leading)
             .background(Color.orange.opacity(0.15))
@@ -111,7 +143,7 @@ struct CigaretteTypeView: View {
     }
 }
 
-// MARK: - Facilities Section
+
 struct FacilitiesView: View {
     var facilities: [Facility]
     
@@ -130,14 +162,64 @@ struct FacilitiesView: View {
     }
 }
 
-// MARK: - Preference Gauge
+
 struct PreferenceGaugeView: View {
+    var area: SmokingArea
+    var userModel: UserModel
+
+    var matchPercentage: Double {
+        calculateMatchPercentage(for: area, user: userModel)
+    }
+    
+    var matchedPreferences: [PreferenceMatch] {
+        var matches: [PreferenceMatch] = []
+
+        // Ambience
+        if area.ambience.caseInsensitiveCompare(userModel.ambiencePreference) == .orderedSame {
+            matches.append(PreferenceMatch(icon: "sun.max", label: userModel.ambiencePreference))
+        }
+
+        // Crowd
+        if area.crowdLevel.caseInsensitiveCompare(userModel.crowdLevelPreference) == .orderedSame {
+            matches.append(PreferenceMatch(icon: "moon.zzz", label: userModel.crowdLevelPreference))
+        }
+
+        // Facilities
+        let userFacilities = Set(userModel.facilityPreference.map { $0.lowercased() })
+        let areaFacilities = Set(area.facilities.map { $0.name.lowercased() })
+        let matchedFacilities = userFacilities.intersection(areaFacilities)
+
+        for type in matchedFacilities {
+            matches.append(PreferenceMatch(icon: icon(for: type), label: type.capitalized))
+
+
+        }
+
+        // Smoking Type
+        let userTypes = Set(userModel.type.map { $0.lowercased() })
+        let areaTypes = Set(area.smokingTypes.map { $0.lowercased() })
+        let matchedTypes = userTypes.intersection(areaTypes)
+
+        for type in matchedTypes {
+            matches.append(PreferenceMatch(icon: icon(for: type), label: type.capitalized))
+        }
+
+
+        return matches
+    }
+
+    struct PreferenceMatch: Identifiable {
+        let id = UUID()
+        let icon: String
+        let label: String
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Gauge(value: 50, in: 0...100) {
+                Gauge(value: matchPercentage, in: 0...100) {
                 } currentValueLabel: {
-                    Text("50%")
+                    Text("\(Int(matchPercentage))%")
                         .font(.headline)
                         .bold()
                         .foregroundColor(.red.opacity(0.8))
@@ -151,14 +233,80 @@ struct PreferenceGaugeView: View {
             }
 
             HStack {
-                PreferenceIconView(icon: "sun.max", label: "Bright")
-                PreferenceIconView(icon: "moon.zzz", label: "Silent")
-                PreferenceIconView(icon: "smoke", label: "Cigarette")
+                ForEach(matchedPreferences) { pref in
+                    PreferenceIconView(icon: pref.icon, label: pref.label)
+                }
             }
+
         }
         .frame(width: 340, alignment: .leading)
+        
+
     }
+    
+    func icon(for label: String) -> String {
+        switch label.lowercased() {
+            case "bright": return "sun.max"
+            case "dim": return "cloud"
+            case "quiet", "silent": return "zzz"
+            case "crowded": return "person.3"
+            case "chair": return "chair.lounge"
+            case "waste bin": return "trash"
+            case "roof": return "roof" // placeholder
+            case "cigarette": return "flame"
+            case "e-cigarette": return "flame.fill"
+            default: return "questionmark.circle"
+        }
+    }
+
+    private func calculateMatchPercentage(for area: SmokingArea, user: UserModel) -> Double {
+        var score = 0.0
+        var total = 0.0
+
+        // Ambience (1 point)
+        total += 1
+        if area.ambience.caseInsensitiveCompare(user.ambiencePreference) == .orderedSame {
+            score += 1
+            print("✅ Ambience matched")
+        } else {
+            print("❌ Ambience mismatch: \(area.ambience) vs \(user.ambiencePreference)")
+        }
+
+        total += 1
+        if area.crowdLevel.caseInsensitiveCompare(user.crowdLevelPreference) == .orderedSame {
+            score += 1
+        } else {
+        }
+
+
+        let userFacilities = Set(user.facilityPreference.map { $0.lowercased() })
+        let areaFacilities = Set(area.facilities.map { $0.name.lowercased() })
+
+        let matchingFacilities = userFacilities.intersection(areaFacilities).count
+        print("🔍 Facilities match count: \(matchingFacilities)/\(userFacilities.count)")
+
+        score += Double(matchingFacilities)
+        total += Double(userFacilities.count)
+
+        // Smoking Types
+        let userTypes = Set(user.type.map { $0.lowercased() })
+        let areaTypes = Set(area.smokingTypes.map { $0.lowercased() })
+
+        let matchingTypes = userTypes.intersection(areaTypes).count
+        print("🔍 Smoking type match count: \(matchingTypes)/\(userTypes.count)")
+
+        score += Double(matchingTypes)
+        total += Double(userTypes.count)
+
+        let final = total > 0 ? (score / total) * 100.0 : 0.0
+        print("➡️ Final Score: \(final)%")
+        return final
+    }
+
+
+
 }
+
 
 // MARK: - Waste Bin Direction
 struct WasteBinDirectionView: View {
@@ -202,7 +350,6 @@ struct WasteBinDirectionView: View {
     }
 }
 
-// MARK: - Reusable Components
 
 struct BadgeView: View {
     var text: String
