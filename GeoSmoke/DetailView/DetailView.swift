@@ -77,18 +77,16 @@ struct HeaderView: View {
             Button(action: {
                 dismiss() // Custom back action
             }) {
-                HStack {
-                    Image(systemName: "chevron.left")
-                        .resizable()
-                        .frame(width: 10, height: 10)
-                    Text("Back")
-                        .font(.subheadline)
-                }
-                .foregroundColor(.green.mix(with: .black, by: 0.3))
-                .padding()
-                .background(Color.green.opacity(0.2))
-                .frame(width: 85, height: 30)
-                .cornerRadius(50)
+                
+                Text("Close")
+                    .font(.subheadline)
+                
+                    .foregroundColor(.green.mix(with: .black, by: 0.3))
+                    .padding()
+                    .frame(width: 85, height: 30)
+                    .background(Color.green.opacity(0.2))
+                    .cornerRadius(10)
+                
             }
             Spacer()
             
@@ -106,7 +104,7 @@ struct HeaderView: View {
                     .foregroundColor(.orange)
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 15)
         .padding(.top, 50)
     }
 }
@@ -120,7 +118,7 @@ struct LocationInfoView: View {
             Text(name)
                 .bold()
                 .font(.title3)
-            BadgeView(text: location, color: .green)
+            BadgeView(text: location, color: .darkGreen)
         }.padding(.bottom, -5)
     }
 }
@@ -132,11 +130,11 @@ struct CigaretteTypeView: View {
         SectionView(title: "Cigarette Type") {
             HStack {
                 ForEach(types, id: \.self) { type in
-                    BadgeView(text: type, color: .orange.opacity(0.7))
+                    BadgeView(text: type, color: .orangetheme.opacity(1))
                 }
             }
             .frame(width: 340, alignment: .leading)
-            .background(Color.orange.opacity(0.15))
+            .background(Color.orangetheme.opacity(0.4))
             .cornerRadius(10)
             
         }
@@ -151,11 +149,11 @@ struct FacilitiesView: View {
         SectionView(title: "Facilities") {
             HStack {
                 ForEach(facilities, id: \.name) { facility in
-                    BadgeView(text: facility.name, color: .green.opacity(0.5))
+                    BadgeView(text: facility.name, color: .darkGreen.opacity(1))
                 }
             }
             .frame(width: 340, alignment: .leading)
-            .background(Color.green.opacity(0.15))
+            .background(Color.darkGreen.opacity(0.4))
             .cornerRadius(10)
         }
         .padding(5)
@@ -232,11 +230,14 @@ struct PreferenceGaugeView: View {
                     .foregroundColor(.black)
             }
             
-            HStack {
-                ForEach(matchedPreferences) { pref in
-                    PreferenceIconView(icon: pref.icon, label: pref.label)
+            ScrollView(.horizontal, showsIndicators: false){
+                HStack {
+                    ForEach(matchedPreferences) { pref in
+                        PreferenceIconView(icon: pref.icon, label: pref.label)
+                    }
                 }
             }
+            
             
         }
         .frame(width: 340, alignment: .leading)
@@ -329,26 +330,34 @@ struct WasteBinDirectionView: View {
                         .scaledToFill()
                         .frame(width: 140, height: 140)
                         .cornerRadius(10)
-                        .padding(10)
+                        .padding(.trailing,5)
+                        .padding(.top, 0)
                 } else {
                     Text("Image not found: \(photoURL)")
                         .foregroundColor(.red)
                 }
                 
-                VStack(alignment: .leading) {
-                    Text("Directions")
-                        .font(.callout)
-                        .bold()
-                        .padding(.vertical, 10)
-                    Text(directions)
-                        .font(.caption2)
-                    Spacer()
+                ScrollView(.vertical, showsIndicators: false){
+                    VStack(alignment: .leading) {
+                        Text("Directions")
+                            .font(.callout)
+                            .bold()
+                            .padding(.bottom, 1)
+                            .padding(.top, 5)
+                        Text(directions)
+                            .font(.caption2)
+                            .padding(.trailing, 20)
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                
+                
             }
             .frame(width: 356, height: 159)
-            .background(Color.green.opacity(0.15))
-            .cornerRadius(10)
+            //            .background(Color.green.opacity(0.15))
+            //            .cornerRadius(10)
         }
         .padding(10)
     }
@@ -400,17 +409,15 @@ struct PreferenceIconView: View {
     
     var body: some View {
         VStack {
-            ZStack {
-                Circle()
-                    .stroke(Color.brown, lineWidth: 1.5)
-                    .frame(width: 32, height: 32)
-                
-                Image(systemName: icon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
-                    .foregroundColor(.orange)
-            }
+            
+            
+            
+            Image(systemName: icon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 20, height: 20)
+                .foregroundColor(.orange)
+            
             Text(label)
                 .font(.caption)
         }
@@ -428,7 +435,7 @@ struct CarouselView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 300, height: 200)
+                        .frame(width: .infinity, height: 200)
                         .clipped()
                         .cornerRadius(10)
                         .padding()
@@ -455,26 +462,27 @@ struct CarouselView: View {
 
 
 
-//#Preview {
-//    DetailView(area: SmokingArea(
-//        name: "The Shady",
-//        location: "GOP 1",
-//        latitude: -6.3009886,
-//        longitude: 106.6510372,
-//        photoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-//        disposalPhotoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-//        disposalDirection: "disitu",
-//        facilities: [
-//            Facility(name: "Chair"),
-//            Facility(name: "Waste Bin"),
-//            Facility(name: "Roof")
-//        ],
-//        isFavorite: false,
-//        allPhoto: [
-//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png")
-//        ]
-//    ))
-//}
+#Preview {
+    DetailView(area: SmokingArea(
+        name: "Ecopuff Corner",
+        location: "GOP 6",
+        latitude: -6.303563,
+        longitude: 106.654619,
+        photoURL: "EcopuffCorner1",
+        disposalPhotoURL: "EcopuffCorner2",
+        disposalDirection: "Find the stairs located near you, find for the nearest disposal unit that located near the lobby.",
+        facilities: [
+            Facility(name: "Waste Bin"),
+            Facility(name: "Roof")
+        ],
+        isFavorite: false,
+        allPhoto: [
+            LocationAllPhoto(photo: "EcopuffCorner1"),
+            LocationAllPhoto(photo: "EcopuffCorner2"),
+        ],
+        facilityGrade: "Moderate",
+        ambience: "Bright",
+        crowdLevel: "High",
+        smokingTypes: ["E-cigarette"]
+    ))
+}

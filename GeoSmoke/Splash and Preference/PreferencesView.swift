@@ -7,6 +7,7 @@ struct PreferencesView: View {
     @Binding var selectedFacilities: Set<String>
     @Binding var selectedTypes: Set<String>
     
+    
     var onSave: () -> Void
     
     var body: some View {
@@ -92,7 +93,7 @@ struct PreferencesView: View {
                 if isSelected {
                     set.wrappedValue.insert(item)
                 } else {
-                    set.wrappedValue.remove(item)   
+                    set.wrappedValue.remove(item)
                 }
             }
         )

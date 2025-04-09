@@ -4,7 +4,7 @@ import SwiftData
 struct FacilityView: View{
     
     @Query var smokingAreas: [SmokingArea]
-    
+    @State private var selectedArea: SmokingArea? = nil
     
     private let gradeOrder: [String: Int] = [
         "High": 0,
@@ -19,14 +19,20 @@ struct FacilityView: View{
     }
     
     var onSelect: ((SmokingArea) -> Void)? = nil
-
+    
     
     var body: some View{
         ScrollView {
             LazyVStack() {
                 ForEach(sortedSmokingAreas, id: \.self) { area in
-                    FacilityViewItem(area: area, onSelect: onSelect)
-                        .padding(.bottom, 3)
+                    FacilityViewItem(area: area,
+                                     isSelected: selectedArea?.id == area.id,
+                                     onSelect: { selected in
+                        selectedArea = selected
+                        onSelect?(selected)
+                    }
+                    )
+                    .padding(.bottom, 3)
                 }
             }
             .padding(.top, 10)
@@ -36,7 +42,7 @@ struct FacilityView: View{
 
 struct FacilityViewItem: View {
     let area: SmokingArea
-
+    var isSelected: Bool
     var onSelect: ((SmokingArea) -> Void)? = nil
     
     @State private var showDetail = false
@@ -70,11 +76,13 @@ struct FacilityViewItem: View {
                     
                     Text(area.facilityGrade)
                         .font(.system(size: 13))
+                        .fontWeight(.semibold)
                         .padding(.vertical, 1)
                         .padding(.horizontal, 8)
                         .background(colorForFacilityGrade(area.facilityGrade))
                         .cornerRadius(4)
                         .padding(.top, 2)
+                    
                     
                 }
                 
@@ -83,16 +91,16 @@ struct FacilityViewItem: View {
                     HStack{
                         ForEach(area.facilities, id: \.name) { facility in
                             Image(systemName: iconName(for: facility.name))
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 15, height: 15)
-                                                .padding(5)
-                                                .background(Color.green.opacity(0.3))
-                                                .clipShape(Circle())
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 15, height: 15)
+                                .padding(.trailing, 3)
+//                                .background(Color.green.opacity(0.3))
+//                                .clipShape(Circle())
                         }
                     }
                 }
-            
+                
             }
             
             Spacer()
@@ -131,6 +139,8 @@ struct FacilityViewItem: View {
         .onTapGesture {
             onSelect?(area)
         }
+        .shadow(color: .splashGreen.opacity(isSelected ? 0.7 : 0),
+                radius: isSelected ? 5 : 0)
     }
     
     func colorForFacilityGrade(_ grade: String) -> Color {
@@ -158,30 +168,31 @@ struct FacilityViewItem: View {
             return "questionmark.circle" // fallback icon
         }
     }
-
+    
 }
 
 //#Preview {
 //    FacilityViewItem(area: SmokingArea(
-//        name: "Garden Seating",
-//        location: "Garden",
-//        latitude: -6.3013122,
-//        longitude: 106.6522975,
-//        photoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-//        disposalPhotoURL: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
-//        disposalDirection: "disitu",
+//        name: "The Shady",
+//        location: "GOP 1",
+//        latitude: -6.3009886,
+//        longitude: 106.6510372,
+//        photoURL: "TheShady1",
+//        disposalPhotoURL: "TheShadyWaste",
+//        disposalDirection: "Find the closest zebra crossing, cross it, and then turn left. The garbage can should be on your right side.",
 //        facilities: [
-//            Facility(name: "Chair"),
 //            Facility(name: "Waste Bin"),
+//            Facility(name: "Roof")
 //        ],
 //        isFavorite: false,
 //        allPhoto: [
-//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png"),
-//            LocationAllPhoto(photo: "https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png")
+//            LocationAllPhoto(photo: "TheShady1"),
+//            LocationAllPhoto(photo: "TheShady2"),
 //        ],
-//        facilityGrade: "High"
-//    ))
+//        facilityGrade: "Moderate",
+//        ambience: "Dark",
+//        crowdLevel: "Low",
+//        smokingTypes: ["Cigarette", "E-cigarette"]
+//    ), isSelected: <#Bool#>)
 //}
 

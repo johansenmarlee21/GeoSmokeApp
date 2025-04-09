@@ -21,12 +21,15 @@ struct ContentView: View {
     @State var selectedFacilities: Set<String>
     @State var selectedTypes: Set<String>
     @State private var currentUser: UserModel?
+    @State private var showSaveConfirmation = false
+    
+    @StateObject private var locationManager = LocationManager.shared
     
     @Namespace private var popUpNameSpace
     @Namespace private var popUpPreferences
     
     @AppStorage("hasLaunchedBefore") private var hasLaunchedBefore: Bool = false
-
+    
     
     // MARK: - Selection & Location
     @State private var selectedArea: SmokingArea?
@@ -105,7 +108,7 @@ struct ContentView: View {
                     .zIndex(4)
                 }
                 if showSmokingAlert{
-//                    alertOverlay
+                    //                    alertOverlay
                     Color.black.opacity(0.8)
                         .ignoresSafeArea()
                         .onTapGesture{
@@ -139,12 +142,14 @@ struct ContentView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Image("Logo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 120)
+                    VStack(alignment: .leading){
+                        Image("Logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 120)
+                    }
+                    
                 }
-                
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     
                     Button(action: {
@@ -152,14 +157,13 @@ struct ContentView: View {
                             showSmokingAlert = true
                         }
                     }) {
-                        
                         Image(systemName: "exclamationmark.triangle")
                             .matchedGeometryEffect(id: "smokingPopup", in: popUpNameSpace)
                             .foregroundColor(.white)
                             .scaledToFit()
                             .padding(7)
                             .frame(width: 36)
-                            .background(Color.darkGreen)
+                            .background(Color.orangetheme)
                             .clipShape(Circle())
                         
                     }
@@ -181,19 +185,15 @@ struct ContentView: View {
                     }
                     
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    
-                    
-                    Image(isInSmokingArea ? "SmokingLogo" : "NoSmokingLogo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 55)
-                }
+//                ToolbarItem(placement: .topBarTrailing) {
+//                    Image(isInSmokingArea ? "SmokingLogo" : "NoSmokingLogo")
+//                        .resizable()
+//                        .scaledToFit()
+//                        .frame(height: 55)
+//                }
             }
-            
             .toolbarBackground(.visible, for: .navigationBar)
             .onAppear {
-                //                onAppearTasks()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     showModal = true
                 }
@@ -247,13 +247,13 @@ struct ContentView: View {
                 
                 if !hasLaunchedBefore {
                     withAnimation {
-                        isPresented = true 
+                        isPresented = true
                     }
                     hasLaunchedBefore = true
                 }
-
                 
-                }
+                
+            }
             .sheet(isPresented: $showModal) {
                 BottomModalView(
                     isExpanded: $isExpanded,
@@ -271,98 +271,112 @@ struct ContentView: View {
                 .presentationBackgroundInteraction(.enabled)
                 .interactiveDismissDisabled(true)
             }
-        }
-    }
-        
-        // MARK: - Alert Overlay
-        var alertOverlay: some View {
-            Color.black.opacity(0.7)
-                .ignoresSafeArea()
-                .onTapGesture {
-                    withAnimation {
-                        showSmokingAlert = false
+            .alert("Preferences Saved", isPresented: $showSaveConfirmation) {
+                Button("OK", role: .cancel) { }
+            }
+            .onChange(of: showSaveConfirmation) { newValue in
+                if newValue == false {
+                    // Alert just dismissed
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        showModal = true
                     }
                 }
-                .overlay(
-                    VStack(spacing: 16) {
-                        Image(systemName: "lungs.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(.red)
-                        
-                        Text("Smoking increases the risk of cancer, heart disease, and lung problems. Your health matters more than a habit.")
-                            .font(.body)
-                            .frame(width: 250)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(.white)
-                            .padding()
-                    }
+            }
+            
+        }
+    }
+    
+    // MARK: - Alert Overlay
+    var alertOverlay: some View {
+        Color.black.opacity(0.7)
+            .ignoresSafeArea()
+            .onTapGesture {
+                withAnimation {
+                    showSmokingAlert = false
+                }
+            }
+            .overlay(
+                VStack(spacing: 16) {
+                    Image(systemName: "lungs.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .foregroundColor(.red)
+                    
+                    Text("Smoking increases the risk of cancer, heart disease, and lung problems. Your health matters more than a habit.")
+                        .font(.body)
+                        .frame(width: 250)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.white)
                         .padding()
-                        .background(Color.black.opacity(0.5))
-                        .cornerRadius(20)
-                        .matchedGeometryEffect(id: "smokingPopup", in: popUpNameSpace)
-                        .transition(.opacity)
-                )
-        }
-        
-        // MARK: - Lifecycle Logic
-//        func onAppearTasks() {
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                showModal = true
-//            }
-//            
-//            LocationManager.shared.getUserLocation { location in
-//                self.userLocation = location
-//            }
-//            
-//            if !hasShownAlert {
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-//                    withAnimation {
-//                        showSmokingAlert = true
-//                        hasShownAlert = true
-//                    }
-//                    
-//                }
-//            }
-//        }
-        
-        func checkIfUserIsInSmokingArea(_ userLocation:CLLocation){
-            let allowedDistance: Double = 10.00
-            
-            isInSmokingArea = smokingAreas.contains {area in
-                let areaLocation = CLLocation(latitude: area.latitude, longitude: area.longitude)
-                return userLocation.distance(from: areaLocation) <= allowedDistance
-            }
-        }
-        func saveUserPreferences() {
-            let descriptor = FetchDescriptor<UserModel>()
-            
-            do {
-                let existingUsers = try modelContext.fetch(descriptor)
-                
-                for user in existingUsers {
-                    modelContext.delete(user)
                 }
-                
-                let user = UserModel(
-                    ambiencePreference: selectedAmbience,
-                    crowdLevelPreference: selectedCrowd,
-                    facilityPreference: Array(selectedFacilities),
-                    type: Array(selectedTypes)
-                )
-                modelContext.insert(user)
-                
-                try modelContext.save()
-                print("✅ Preferences saved and old ones replaced.")
-                
-            } catch {
-                print("❌ Failed to save preferences: \(error)")
-            }
-        }
-        
-        
+                    .padding()
+                    .background(Color.black.opacity(0.5))
+                    .cornerRadius(20)
+                    .matchedGeometryEffect(id: "smokingPopup", in: popUpNameSpace)
+                    .transition(.opacity)
+            )
     }
+    
+    // MARK: - Lifecycle Logic
+    //        func onAppearTasks() {
+    //            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+    //                showModal = true
+    //            }
+    //
+    //            LocationManager.shared.getUserLocation { location in
+    //                self.userLocation = location
+    //            }
+    //
+    //            if !hasShownAlert {
+    //                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+    //                    withAnimation {
+    //                        showSmokingAlert = true
+    //                        hasShownAlert = true
+    //                    }
+    //
+    //                }
+    //            }
+    //        }
+    
+    func checkIfUserIsInSmokingArea(_ userLocation:CLLocation){
+        let allowedDistance: Double = 10.00
+        
+        isInSmokingArea = smokingAreas.contains {area in
+            let areaLocation = CLLocation(latitude: area.latitude, longitude: area.longitude)
+            return userLocation.distance(from: areaLocation) <= allowedDistance
+        }
+    }
+    func saveUserPreferences() {
+        let descriptor = FetchDescriptor<UserModel>()
+        
+        do {
+            let existingUsers = try modelContext.fetch(descriptor)
+            
+            for user in existingUsers {
+                modelContext.delete(user)
+            }
+            
+            let user = UserModel(
+                ambiencePreference: selectedAmbience,
+                crowdLevelPreference: selectedCrowd,
+                facilityPreference: Array(selectedFacilities),
+                type: Array(selectedTypes)
+            )
+            modelContext.insert(user)
+            
+            try modelContext.save()
+            print("✅ Preferences saved and old ones replaced.")
+            
+            showSaveConfirmation = true
+            
+        } catch {
+            print("❌ Failed to save preferences: \(error)")
+        }
+    }
+    
+    
+}
 
 
 #Preview {

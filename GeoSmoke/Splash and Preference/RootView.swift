@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct RootView: View {
+    @StateObject private var locationManager = LocationManager.shared
     @State private var showSplash = true
     let modelContainer: ModelContainer
 
@@ -22,6 +23,9 @@ struct RootView: View {
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
+                locationManager.getUserLocation{location in
+                    print("Location recieved in splash: \(String(describing: location))")
+                }
                 withAnimation {
                     showSplash = false
                 }

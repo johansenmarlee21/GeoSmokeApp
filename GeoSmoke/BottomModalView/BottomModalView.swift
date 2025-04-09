@@ -6,7 +6,7 @@ struct BottomModalView: View {
     @Binding var detent: PresentationDetent
     @Binding var selectedArea: SmokingArea?
     @Binding var selectedFilter: FilterType
-
+    
     
     enum FilterType: String {
         case nearest = "Nearest"
@@ -18,11 +18,13 @@ struct BottomModalView: View {
         VStack(alignment: .leading){
             
             HStack{
-                Text(selectedFilter.rawValue)
+                
+                Text(selectedFilter == .facility ? "Facility Grade" : selectedFilter.rawValue)
                     .font(.title)
                     .bold()
                     .padding(.top, 23)
                     .padding(.horizontal)
+                
                 
                 Spacer()
                 if(isExpanded == false){
@@ -42,6 +44,7 @@ struct BottomModalView: View {
                             isExpanded = false
                             detent = .fraction(0.06)
                         }
+                        NotificationCenter.default.post(name: .returnToUserLocation, object: nil)
                     }){
                         Text("Close")
                             .font(.system(size: 16))
@@ -86,7 +89,7 @@ struct BottomModalView: View {
         }
         .padding(.horizontal)
     }
-        
+    
 }
 
 
@@ -110,19 +113,21 @@ struct FilterButton:View {
                     .padding(13)
                     .frame(width: 54, height: 54)
                     .foregroundColor(selectedFilter == type ? Color.darkGreen : Color.black.opacity(0.9))
-//                    .foregroundColor(.black.opacity(0.9))
+                //                    .foregroundColor(.black.opacity(0.9))
                     .background(selectedFilter == type ? Color.green300 : Color.white)
                     .clipShape(.circle)
                 
             }
             Text(title)
                 .font(.system(size: 13))
-                
+            
         }
     }
 }
 
-
+extension Notification.Name{
+    static let returnToUserLocation = Notification.Name("returnToUserLocation")
+}
 
 
 

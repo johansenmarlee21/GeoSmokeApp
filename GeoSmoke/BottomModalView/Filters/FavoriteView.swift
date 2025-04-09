@@ -3,23 +3,35 @@ import SwiftData
 
 struct FavoriteView: View{
     @Query(filter: #Predicate<SmokingArea> { $0.isFavorite == true })
+    
     var favoriteAreas: [SmokingArea] = []
+    
+    @State private var selectedArea: SmokingArea? = nil
     
     var onSelect: (SmokingArea) -> Void
     
     var body: some View {
         ZStack {
             Color.white.ignoresSafeArea()
-                
+            
             if favoriteAreas.isEmpty {
                 EmptyFavoriteView()
             } else {
                 ScrollView{
                     LazyVStack{
                         ForEach(favoriteAreas) { area in
-                            FavoriteListItem(area: area, onSelect: onSelect)
+                            let isSelected = selectedArea?.id == area.id
+                            FavoriteListItem(
+                                area: area,
+                                isSelected: isSelected,
+                                onSelect: { selected in
+                                    selectedArea = selected
+                                    onSelect(selected)
+                                }
+                            )
                         }
                     }
+                    .padding(.top, 10)
                 }
             }
         }
@@ -54,8 +66,9 @@ struct EmptyFavoriteView: View {
 
 struct FavoriteListItem: View {
     var area: SmokingArea
+    var isSelected: Bool
     var onSelect: ((SmokingArea) -> Void)? = nil
-
+    
     @State private var showDetail = false
     
     var body: some View {
@@ -86,13 +99,11 @@ struct FavoriteListItem: View {
                 ScrollView(.horizontal, showsIndicators: false){
                     HStack{
                         ForEach(area.facilities, id: \.name) { facility in
-                            Text("\(facility.name)")
-                                .font(.system(size: 13))
-                                .padding(.vertical, 1)
-                                .padding(.horizontal, 8)
-                                .background(Color.green.opacity(0.3))
-                                .cornerRadius(8)
-                                .padding(.top, 2)
+                            Image(systemName: iconName(for: facility.name))
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 15, height: 15)
+                                .padding(.trailing, 3)
                         }
                     }
                 }
@@ -101,29 +112,29 @@ struct FavoriteListItem: View {
             Spacer()
             
             VStack{
-                Image(systemName: "bookmark.fill")
-                    .resizable()
-                    .frame(width: 20, height: 28)
-                    .foregroundStyle(.orange)
-                    .padding(.top, 4)
-                Spacer()
                 Button(action: {
                     showDetail = true
-                }) {
-                    Text("Detail")
-                        .font(.caption2)
-                        .foregroundStyle(Color.white)
-                        .padding(.horizontal, 4)
-                        .frame(width: 40, height: 20)
-                        .background(Color.orange)
-                        .cornerRadius(10)
+                }){
+                    VStack(alignment: .center){
+                        Image(systemName: "location.fill")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                            .foregroundColor(Color.white)
+                        
+                        Text("Detail")
+                            .font(.subheadline)
+                            .foregroundColor(Color.white)
+                    }
+                    .frame(width: 60)
+                    .frame(maxHeight: 70)
+                    .background(Color.orangetheme)
+                    .cornerRadius(10)
+                    .padding(.trailing, 5)
                 }
                 .fullScreenCover(isPresented: $showDetail) {
                     DetailView(area: area)
                 }
-
             }
-            .padding(.trailing, 10)
             
         }
         .padding(.vertical, 8)
@@ -132,12 +143,27 @@ struct FavoriteListItem: View {
         .background(Color.green100)
         .cornerRadius(10)
         .onTapGesture {
-            onSelect?(area) 
+            onSelect?(area)
+        }
+        .shadow(color: .splashGreen.opacity(isSelected ? 0.7 : 0),
+                radius: isSelected ? 5 : 0)
+    }
+    
+    func iconName(for facility: String) -> String {
+        switch facility {
+        case "Chair":
+            return "chair.lounge"
+        case "Waste Bin":
+            return "trash"
+        case "Roof":
+            return "house"
+        default:
+            return "questionmark.circle" // fallback icon
         }
     }
 }
 
-//#Preview {    
+//#Preview {
 //    FavoriteListItem(area: SmokingArea(
 //        name: "Garden Seating",
 //        location: "Garden",

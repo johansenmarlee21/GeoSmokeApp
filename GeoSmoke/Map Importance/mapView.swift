@@ -14,18 +14,16 @@ struct MapView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> MapViewController {
         let controller = MapViewController(context: self.context)
         controller.onDetailNavigation = {
-            self.showModal = false 
+            self.showModal = false
         }
         return controller
     }
     
     func updateUIViewController(_ uiViewController: MapViewController, context: Context) {
         if let selectedArea = selectedArea {
-            uiViewController.centerMap(on: selectedArea)
+            uiViewController.showRoute(on: selectedArea)
         }
         uiViewController.setSmokingAreas(filteredAreas, colorOverride: colorOverride)
     }
     
 }
-
-

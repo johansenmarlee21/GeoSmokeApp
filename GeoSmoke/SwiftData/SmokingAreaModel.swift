@@ -20,11 +20,11 @@ import SwiftData
 //    var isFavorite: Bool
 //    @Relationship(deleteRule: .cascade) var allPhoto: [LocationAllPhoto] = []
 //    var facilityGrade: String
-//    
+//
 //    var ambience: String       // NEW
 //    var crowdLevel: String     // NEW
 //    var smokingType: String
-//    
+//
 //    init(name: String, location: String, latitude: Double,longitude: Double,  photoURL: String, disposalPhotoURL: String, disposalDirection: String, facilities: [Facility] = [], isFavorite: Bool = false, allPhoto: [LocationAllPhoto] = [], facilityGrade: String, ambience: String, crowdLevel: String, smokingType: String){
 //        self.name = name
 //        self.location = location
@@ -40,7 +40,7 @@ import SwiftData
 //        self.ambience = ambience         // NEW
 //        self.crowdLevel = crowdLevel     // NEW
 //        self.smokingType = smokingType   // NEW
-//        
+//
 //    }
 //}
 
@@ -54,16 +54,16 @@ class SmokingArea: Identifiable {
     var photoURL: String
     var disposalPhotoURL: String
     var disposalDirection: String
-
+    
     @Relationship(deleteRule: .cascade) var facilities: [Facility]
     var isFavorite: Bool
     @Relationship(deleteRule: .cascade) var allPhoto: [LocationAllPhoto]
     var facilityGrade: String
-
+    
     var ambience: String
     var crowdLevel: String
     var smokingTypes: [String]
-
+    
     init(
         name: String,
         location: String,
@@ -91,7 +91,7 @@ class SmokingArea: Identifiable {
         self.isFavorite = isFavorite
         self.allPhoto = allPhoto
         self.facilityGrade = facilityGrade
-
+        
         self.ambience = ambience
         self.crowdLevel = crowdLevel
         self.smokingTypes = smokingTypes
@@ -103,7 +103,7 @@ class SmokingArea: Identifiable {
 @Model
 class Facility {
     var name: String
-        init(name: String) {
+    init(name: String) {
         self.name = name
     }
 }

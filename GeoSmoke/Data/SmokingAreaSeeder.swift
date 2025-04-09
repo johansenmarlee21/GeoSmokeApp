@@ -3,11 +3,11 @@ import Foundation
 
 struct SmokingAreaSeeder {
     static let preloadKey = "hasPreloadedSmokingArea"
-
+    
     static func seedDataIfNeeded(context: ModelContext) {
         let hasPreloaded = UserDefaults.standard.bool(forKey: preloadKey)
         guard !hasPreloaded else { return }
-
+        
         do {
             let sampleAreas = [
                 SmokingArea(
@@ -17,7 +17,7 @@ struct SmokingAreaSeeder {
                     longitude: 106.6510372,
                     photoURL: "TheShady1",
                     disposalPhotoURL: "TheShadyWaste",
-                    disposalDirection: "disitu",
+                    disposalDirection: "Find the closest zebra crossing, cross it, and then turn left. The garbage can should be on your right side.",
                     facilities: [
                         Facility(name: "Waste Bin"),
                         Facility(name: "Roof")
@@ -39,7 +39,7 @@ struct SmokingAreaSeeder {
                     longitude: 106.6522975,
                     photoURL: "GardenSeating1",
                     disposalPhotoURL: "GardenSeating2",
-                    disposalDirection: "disitu",
+                    disposalDirection: "The disposal unit should be located directly at the location.",
                     facilities: [
                         Facility(name: "Chair"),
                         Facility(name: "Waste Bin"),
@@ -62,7 +62,7 @@ struct SmokingAreaSeeder {
                     longitude: 106.654619,
                     photoURL: "EcopuffCorner1",
                     disposalPhotoURL: "EcopuffCorner2",
-                    disposalDirection: "disitu",
+                    disposalDirection: "Find the stairs located near you, find for the nearest disposal unit that located near the lobby.",
                     facilities: [
                         Facility(name: "Waste Bin"),
                         Facility(name: "Roof")
@@ -84,7 +84,7 @@ struct SmokingAreaSeeder {
                     longitude: 106.654589,
                     photoURL: "TheJog1",
                     disposalPhotoURL: "TheJog2",
-                    disposalDirection: "disitu",
+                    disposalDirection: "The disposal unit should be located directly at the location.",
                     facilities: [
                         Facility(name: "Waste Bin"),
                     ],
@@ -105,7 +105,7 @@ struct SmokingAreaSeeder {
                     longitude: 106.650891,
                     photoURL: "SmokeScape1",
                     disposalPhotoURL: "SmokeScape2",
-                    disposalDirection: "disitu",
+                    disposalDirection: "Go to the garden area, find the disposal unit that located inside the garden.",
                     facilities: [
                         Facility(name: "Roof")
                     ],
@@ -125,8 +125,8 @@ struct SmokingAreaSeeder {
                     latitude: -6.3023203,
                     longitude: 106.6527786,
                     photoURL: "NineLoner1",
-                    disposalPhotoURL: "NineLoner2",
-                    disposalDirection: "disitu",
+                    disposalPhotoURL: "NineLoner1",
+                    disposalDirection: "The disposal unit should be located directly at the location.",
                     facilities: [
                         Facility(name: "Waste Bin"),
                         Facility(name: "Chair"),
@@ -148,7 +148,7 @@ struct SmokingAreaSeeder {
                     longitude: 106.6529061,
                     photoURL: "SmokeStage1",
                     disposalPhotoURL: "SmokeStage2",
-                    disposalDirection: "disitu",
+                    disposalDirection: "The disposal unit should be located directly at the location.",
                     facilities: [
                         Facility(name: "Waste Bin"),
                     ],
@@ -169,7 +169,7 @@ struct SmokingAreaSeeder {
                     longitude: 106.6525899,
                     photoURL: "SixJog1",
                     disposalPhotoURL: "SixJogWaste",
-                    disposalDirection: "disitu",
+                    disposalDirection: "The disposal unit should be located directly at the location.",
                     facilities: [
                         Facility(name: "Waste Bin"),
                         Facility(name: "Chair")
@@ -186,11 +186,11 @@ struct SmokingAreaSeeder {
                 ),
                 
             ]
-
+            
             for area in sampleAreas {
                 context.insert(area)
             }
-
+            
             try context.save()
             UserDefaults.standard.set(true, forKey: preloadKey)
             print("✅ Seeded initial SmokingArea data.")
