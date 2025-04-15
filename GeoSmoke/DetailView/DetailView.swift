@@ -367,6 +367,8 @@ struct WasteBinDirectionView: View {
 }
 
 
+
+
 struct BadgeView: View {
     var text: String
     var color: Color

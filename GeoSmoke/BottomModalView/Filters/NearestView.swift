@@ -264,6 +264,9 @@ struct SmokingAreaListItem: View {
                 .background(Color.orangetheme)
                 .cornerRadius(10)
                 .padding(.trailing, 5)
+                .fullScreenCover(isPresented: $showDetail) {
+                    DetailView(area: area)
+                }
 
             }
             .fullScreenCover(isPresented: $showDetail) {
@@ -285,6 +288,8 @@ struct SmokingAreaListItem: View {
                 radius: isSelected ? 5 : 0)
     }
 }
+
+
 
 #Preview {
     NearestCardView(area: SmokingArea(

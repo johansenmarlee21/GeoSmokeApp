@@ -141,6 +141,7 @@ struct ContentView: View {
                     .transition(.opacity)
                     .zIndex(3)
                 }
+
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
